@@ -28,9 +28,15 @@ triara.controller('indexCtrl', function($scope, $http) {
 	$scope.createAddEmail = null;
 	$scope.createRemoveEmail = null;
 	$scope.uploadImage = null;
+	$scope.editDireccion = null;
+	$scope.addDireccion = null;
+	$scope.removeDireccion = null;
+	$scope.createRemoveDireccion = null;
+	$scope.createDireccion = null;
 
 	$scope.createTelefonosArray = [];
 	$scope.createCorreosArray = [];
+	$scope.createDireccionArray = [];
 
 	$scope.getAllContacts = function() {
 		$http.get('/api/obtenerContactos').then(function(r) {
@@ -192,6 +198,35 @@ triara.controller('indexCtrl', function($scope, $http) {
 		});
 	};
 
+	// funciones para direcciones
+	$scope.addDireccion = function() {
+		var data = {
+			idContacto: $scope.contactTmp.ID,
+			direccion: $scope.editDireccion
+		};
+		$http.post('/api/crearDirecciones', data).then(function(r) {
+			if( $scope.contactTmp.DIRECCIONES !== null ) {
+				$scope.contactTmp.DIRECCIONES[$scope.contactTmp.DIRECCIONES.length] = r.data[0];
+			}
+			else {
+				$scope.contactTmp.DIRECCIONES = [r.data[0]];
+			}
+			$scope.getAllContacts();
+			$scope.editDireccion = null;
+		});
+	};
+
+	$scope.removeDireccion = function(direccion) {
+		$http.get('/api/borrarDirecciones/' + direccion.ID + '/' + direccion.ID_CONTACTO).then(function(){
+			$scope.getAllContacts();
+			for(var i = 0; i < $scope.contactTmp.DIRECCIONES.length; i++) {
+				if($scope.contactTmp.DIRECCIONES[i] == direccion) {
+					$scope.contactTmp.DIRECCIONES.splice(i, 1);
+				}
+			}
+		});
+	};
+
 	// funciones para crear
 	$scope.createAddNumber = function() {
 		if( $scope.createTelefono !== null && $scope.createTelefonoEtiqueta !== null && $scope.createTelefono.length == 10 && $scope.createTelefonoEtiqueta.length > 0 ) {
@@ -249,14 +284,29 @@ triara.controller('indexCtrl', function($scope, $http) {
 				alias: $scope.createAlias,
 				fechaNacimiento: $scope.createFechaNacimiento,
 				telefonos: $scope.createTelefonosArray,
-				correos: $scope.createCorreosArray
+				correos: $scope.createCorreosArray,
+				direcciones: $scope.createDireccionArray,
 			};
 			$http.post('/api/crearContactoFull', data).then(function(r) {
-				console.log(r.data);
 				$scope.getAllContacts();
 			});
 		}
 		$scope.unloadTmp();
+	};
+
+	$scope.createAddDireccion = function() {
+		$scope.createDireccionArray[$scope.createDireccionArray.length] = {
+			DIRECCION: $scope.createDireccion,
+		};
+		$scope.createDireccion = null;
+	};
+
+	$scope.createRemoveDireccion = function(direccion) {
+		for(var i = 0; i < $scope.createDireccionArray.length; i++) {
+			if($scope.createDireccionArray[i] == direccion) {
+				$scope.createDireccionArray.splice(i, 1);
+			}
+		}
 	};
 
 	// init

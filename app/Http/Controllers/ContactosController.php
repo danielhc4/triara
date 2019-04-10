@@ -12,12 +12,16 @@ class ContactosController extends Controller {
         foreach( $contactosArray as $contacto ) {
             $contacto['CORREOS'] = \DB::select('SELECT CO.* FROM CONTACTO C LEFT JOIN CORREOS CO ON CO.ID_CONTACTO = C.ID WHERE C.ID = ' . $contacto->ID);
             $contacto['TELEFONOS'] = \DB::select('SELECT T.* FROM CONTACTO C LEFT JOIN TELEFONOS T ON T.ID_CONTACTO = C.ID WHERE C.ID = ' . $contacto->ID);
+            $contacto['DIRECCIONES'] = \DB::select('SELECT D.* FROM CONTACTO C LEFT JOIN DIRECCIONES D ON D.ID_CONTACTO = C.ID WHERE C.ID = ' . $contacto->ID);
             if($contacto['TELEFONOS'][0]->ID == null) {
                 $contacto['TELEFONOS'] = null;
             }
             if($contacto['CORREOS'][0]->ID == null) {
                 $contacto['CORREOS'] = null;
-            } 
+            }
+            if($contacto['DIRECCIONES'][0]->ID == null) {
+                $contacto['DIRECCIONES'] = null;
+            }
         }
         return  $contactosArray;
     }
@@ -51,6 +55,7 @@ class ContactosController extends Controller {
         $fechaCreacion = date("Y-m-d");
         $telefonos = $request->__get('telefonos');
         $correos = $request->__get('correos');
+        $direcciones = $request->__get('direcciones');
 
         $idContacto = \App\ContactosModel::insertGetId(['NOMBRE' => $nombre, 'APELLIDO_PATERNO' => $apellidoPaterno, 'APELLIDO_MATERNO' => $apellidoMaterno, 'FECHA_NACIMIENTO' => $fechaNacimiento, 'ALIAS' => $alias, 'FECHA_CREACION' => $fechaCreacion]);
 
@@ -59,6 +64,9 @@ class ContactosController extends Controller {
         }
         for($i = 0; $i < count($correos); $i++) {
             \App\CorreosModel::insertGetId(['ID_CONTACTO' => $idContacto, 'CORREO' => $correos[$i]['CORREO'] ]);
+        }
+        for($i = 0; $i < count($direcciones); $i++) {
+            \App\DireccionesModel::insertGetId(['ID_CONTACTO' => $idContacto, 'DIRECCION' => $direcciones[$i]['DIRECCION'] ]);
         }
         return \DB::select('SELECT * FROM CONTACTO WHERE ID = ' . $idContacto);
     }
@@ -100,6 +108,7 @@ class ContactosController extends Controller {
     public function borrarContacto(int $idContacto) {
         \DB::select('DELETE FROM CORREOS WHERE ID_CONTACTO = ' . $idContacto);
         \DB::select('DELETE FROM TELEFONOS WHERE ID_CONTACTO = ' . $idContacto);
+        \DB::select('DELETE FROM DIRECCIONES WHERE ID_CONTACTO = ' . $idContacto);
         \App\ContactosModel::destroy(['ID' => $idContacto]);
         return ['ID' => $idContacto];
     }

@@ -33,3 +33,9 @@ Route::get('obtenerCorreos', 'CorreosController@obtenerCorreos');
 Route::post('crearCorreo', 'CorreosController@crearCorreo');
 Route::post('editarCorreo', 'CorreosController@editarCorreo');
 Route::get('borrarCorreo/{idCorreo}/{idContacto}', 'CorreosController@borrarCorreo');
+
+// direcciones
+Route::get('obtenerDirecciones', 'DireccionesController@obtenerDirecciones');
+Route::post('crearDirecciones', 'DireccionesController@crearDireccion');
+Route::post('editarDirecciones', 'DireccionesController@editarDireccion');
+Route::get('borrarDirecciones/{idCorreo}/{idContacto}', 'DireccionesController@borrarDireccion');

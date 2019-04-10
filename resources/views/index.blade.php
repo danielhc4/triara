@@ -180,6 +180,36 @@
 												</div>
 											</form>
 										</div>
+
+										<div class="col-12">
+
+											<!-- Tabla para mostrar direcciones -->
+											<h4>Correos Electrónicos</h4>
+											<table class="table table-striped table-bordered triara-table">
+												<thead>
+													<tr>
+														<th>DIRECCIONES</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-show="createDireccionArray.length > 0" ng-repeat="direccion in createDireccionArray">
+														<td><i class="far fa-times-circle" ng-click="createRemoveDireccion(direccion)"></i> <% direccion.DIRECCION %></td>
+													</tr>
+												</tbody>
+											</table>
+
+											<!-- Tabla para llenar direcciones -->
+											<form>
+												<div class="form-row">
+													<div class="col-9">
+														<input type="text" ng-model="createDireccion" id="createDireccion" maxlength="256" class="form-control" placeholder="Dirección">
+													</div>
+													<div class="col-3">
+														<button type="button" class="btn btn-success" ng-click="createAddDireccion()">Agregar</button>
+													</div>
+												</div>
+											</form>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -271,6 +301,19 @@
 											<tr ng-repeat="correo in contactTmp.CORREOS">
 												<td colspan="2"><%correo.CORREO%></td>
 												<td colspan="2" ng-show="contactTmp.TELEFONOS.length == 0">NONE</td>
+											</tr>
+										</tbody>
+									</table>
+									<table class="table table-striped table-dark triara-table">
+										<thead>
+											<tr>
+												<th colspan="2">DIRECCIONES</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="direccion in contactTmp.DIRECCIONES">
+												<td colspan="2"><%direccion.DIRECCION%></td>
+												<td colspan="2" ng-show="contactTmp.DIRECCIONES.length == 0">NONE</td>
 											</tr>
 										</tbody>
 									</table>
@@ -372,6 +415,31 @@
 													</div>
 													<div class="col-3">
 														<button type="button" class="btn btn-success" ng-click="addEmail()">Agregar</button>
+													</div>
+												</div>
+											</form>
+										</div>
+										<div class="col-12">
+											<h4>Direcciones</h4>
+											<table class="table table-striped table-bordered triara-table">
+												<thead>
+													<tr>
+														<th>DIRECCIONES</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-show="contactTmp.DIRECCIONES.length > 0" ng-repeat="direccion in contactTmp.DIRECCIONES">
+														<td><i class="far fa-times-circle" ng-click="removeDireccion(direccion)"></i> <% direccion.DIRECCION %></td>
+													</tr>
+												</tbody>
+											</table>
+											<form>
+												<div class="form-row">
+													<div class="col-9">
+														<input type="text" ng-model="editDireccion" id="editDireccion" maxlength="256" class="form-control" placeholder="Dirección">
+													</div>
+													<div class="col-3">
+														<button type="button" class="btn btn-success" ng-click="addDireccion()">Agregar</button>
 													</div>
 												</div>
 											</form>
