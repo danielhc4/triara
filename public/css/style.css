@@ -1,0 +1,11 @@
+.phones-list ul li {
+    list-style-type: none;
+    color: #333;
+}
+.phones-list ul li i {
+    cursor: pointer;
+}
+
+.triara-table tbody {
+    font-size: 12px !important;
+}
